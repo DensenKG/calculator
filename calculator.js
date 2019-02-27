@@ -1,4 +1,7 @@
 let calcContainer = document.querySelector('#calc-container');
+let calcDisplay = document.getElementById('calc-display');
+let displayTop = document.getElementById('display-top');
+let displayBottom = document.getElementById('display-bottom');
 let numRows = 4;
 let numColumns = numRows;
 document.body.onload = createButtons;
@@ -16,6 +19,7 @@ function createButtons()
     }
   }
   labelButtons();
+  updateDisplay();
 }
 
 function labelButtons()
@@ -38,7 +42,7 @@ function labelButtons()
         allButtons[i].setAttribute('id', 'three-button');
         break;
       case 3:
-        allButtons[i].textContent = "/";
+        allButtons[i].textContent = "÷";
         allButtons[i].setAttribute('id', 'divide-button');
         break;
       case 4:
@@ -135,4 +139,14 @@ function operate(a, b, operator)
       break;
   }
   return result;
+}
+
+function updateDisplay()
+{
+  var operationString = '';
+  var displayValue = '';
+  operationString = "100+20+3"
+  displayValue = 123;
+  displayTop.textContent = operationString;
+  displayBottom.textContent = displayValue;
 }

@@ -18,7 +18,19 @@
   border: 1px solid black;
 }
 
+#display-bottom
+{
+  font-size: 30px;
+}
+
 .calc-button
 {
   font-size: 20px;
+}
+
+.display-segment
+{
+  width: inherit;
+  height: 37.5px;
+  text-align: right;
 }
