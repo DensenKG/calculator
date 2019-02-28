@@ -4,7 +4,17 @@ let displayTop = document.getElementById('display-top');
 let displayBottom = document.getElementById('display-bottom');
 let numRows = 4;
 let numColumns = numRows;
-document.body.onload = createButtons;
+let operationString = '';
+let displayValue = 0;
+document.body.onload = createCalculator;
+
+function createCalculator()
+{
+  createButtons();
+  updateDisplay();
+  manageButtonFunctionality();
+}
+
 
 function createButtons()
 {
@@ -19,7 +29,6 @@ function createButtons()
     }
   }
   labelButtons();
-  updateDisplay();
 }
 
 function labelButtons()
@@ -143,10 +152,30 @@ function operate(a, b, operator)
 
 function updateDisplay()
 {
-  var operationString = '';
-  var displayValue = '';
-  operationString = "100+20+3"
-  displayValue = 123;
   displayTop.textContent = operationString;
   displayBottom.textContent = displayValue;
+}
+
+function clearDisplay()
+{
+  operationString = "";
+  displayValue = 0;
+}
+
+function manageButtonFunctionality()
+{
+  calcContainer.addEventListener("click", function(e){
+    if(e.target.id == "clear-button")
+    {
+      clearDisplay();
+    }
+    else
+    {
+      if(operationString.length <= 20)
+      {
+        operationString += e.target.textContent;
+      }
+    }
+    updateDisplay();
+  });
 }

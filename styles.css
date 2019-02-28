@@ -16,6 +16,7 @@
   height: 75px;
   margin: auto;
   border: 1px solid black;
+  padding-right: 5px;
 }
 
 #display-bottom
