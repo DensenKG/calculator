@@ -51,8 +51,9 @@ function labelButtons()
         allButtons[i].setAttribute('id', 'three-button');
         break;
       case 3:
-        allButtons[i].textContent = "÷";
+        allButtons[i].textContent = "/";
         allButtons[i].setAttribute('id', 'divide-button');
+        allButtons[i].setAttribute('title', "Division");
         break;
       case 4:
         allButtons[i].textContent = "4";
@@ -67,8 +68,9 @@ function labelButtons()
         allButtons[i].setAttribute('id', 'six-button');
         break;
       case 7:
-        allButtons[i].textContent = "x";
+        allButtons[i].textContent = "*";
         allButtons[i].setAttribute('id', 'mult-button');
+        allButtons[i].setAttribute('title', "Multiplication");
         break;
       case 8:
         allButtons[i].textContent = "7";
@@ -85,10 +87,12 @@ function labelButtons()
       case 11:
         allButtons[i].textContent = "-";
         allButtons[i].setAttribute('id', 'sub-button');
+        allButtons[i].setAttribute('title', "Subtraction");
         break;
       case 12:
         allButtons[i].textContent = "C";
         allButtons[i].setAttribute('id', 'clear-button');
+        allButtons[i].setAttribute('title', "Clear");
         break;
       case 13:
         allButtons[i].textContent = "0";
@@ -101,6 +105,7 @@ function labelButtons()
       case 15:
         allButtons[i].textContent = "+";
         allButtons[i].setAttribute('id', 'add-button');
+        allButtons[i].setAttribute('title', "Addition");
     }
   }
 }
@@ -169,6 +174,10 @@ function manageButtonFunctionality()
     {
       clearDisplay();
     }
+    else if(e.target.id == "equals-button")
+    {
+      manageOperations();
+    }
     else
     {
       if(operationString.length <= 20)
@@ -178,4 +187,28 @@ function manageButtonFunctionality()
     }
     updateDisplay();
   });
+}
+
+function manageOperations()
+{
+  var stringStart = operationString[0];
+
+  for (var i = 0; i < operationString.length; i++)
+  {
+    if(operationString[i] == '+' || operationString[i] == '-' || operationString[i] == '*' || operationString[i] == '/')
+    {
+      if(operationString[i] == stringStart)
+      {
+        displayValue = 'INVALID';
+      }
+      else
+      {
+        var previousInput = operationString[i-1];
+      }
+      if(previousInput == '+' || previousInput == '-' || previousInput == '*' || previousInput == '/')
+      {
+        displayValue = 'INVALID';
+      }
+    }
+  }
 }
