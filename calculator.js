@@ -5,7 +5,8 @@ let displayBottom = document.getElementById('display-bottom');
 let numRows = 4;
 let numColumns = numRows;
 let operationString = '';
-let displayValue = 0;
+let currentInput = '';
+let displayValue = '0';
 document.body.onload = createCalculator;
 
 function createCalculator()
@@ -127,11 +128,16 @@ function multiply(a, b)
 
 function divide(a, b)
 {
-  if(b === 0)
+  if(b != 0)
   {
-    alert("This value is undefined.");
+    return a / b;
   }
-  return a / b;
+  else
+  {
+    alert("Thank Douglas Adams.");
+    disableButtons();
+    return 42;
+  }
 }
 
 function operate(a, b, operator)
@@ -164,7 +170,8 @@ function updateDisplay()
 function clearDisplay()
 {
   operationString = "";
-  displayValue = 0;
+  displayValue = '0';
+  currentInput = '';
 }
 
 function manageButtonFunctionality()
@@ -192,11 +199,23 @@ function manageButtonFunctionality()
 function manageOperations()
 {
   var stringStart = operationString[0];
+  var operator;
+  var solution;
 
   for (var i = 0; i < operationString.length; i++)
   {
     if(operationString[i] == '+' || operationString[i] == '-' || operationString[i] == '*' || operationString[i] == '/')
     {
+      operator = operationString[i];
+      if(displayValue != '0')
+      {
+        firstNum = displayValue;
+      }
+      else
+      {
+        firstNum = currentInput;
+      }
+      currentInput = '';
       if(operationString[i] == stringStart)
       {
         displayValue = 'INVALID';
@@ -208,6 +227,49 @@ function manageOperations()
       if(previousInput == '+' || previousInput == '-' || previousInput == '*' || previousInput == '/')
       {
         displayValue = 'INVALID';
+      }
+    }
+    else
+    {
+      currentInput = currentInput + operationString[i];
+      secondNum = currentInput;
+    }
+  }
+  var parsedFirst = parseInt(firstNum, 10);
+  var parsedSecond = parseInt(secondNum, 10);
+  if(operationString.charAt(operationString.length - 1) != operator)
+  {
+    solution = operate(parsedFirst, parsedSecond, operator);
+    if(solution % 1 === 0)
+    {
+      displayValue = solution;
+    }
+    else
+    {
+      displayValue = solution.toFixed(4);
+    }
+  }
+  else
+  {
+    displayValue = 'INVALID';
+  }
+}
+
+function disableButtons()
+{
+  var allButtons = document.querySelectorAll('.calc-button');
+  {
+    for(var i = 0; i < allButtons.length; i++)
+    {
+      if(allButtons[i].id != 'clear-button')
+      {
+        allButtons[i].disabled = true;
+      }
+      else
+      {
+        allButtons[i].addEventListener("click", function(){
+        window.location.reload();
+        });
       }
     }
   }
