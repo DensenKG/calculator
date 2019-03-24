@@ -201,20 +201,17 @@ function manageOperations()
   var stringStart = operationString[0];
   var operator;
   var solution;
+  var firstNum;
+  var operatorCount = 0;
+  var totalOperations = 0;
 
   for (var i = 0; i < operationString.length; i++)
   {
     if(operationString[i] == '+' || operationString[i] == '-' || operationString[i] == '*' || operationString[i] == '/')
     {
+      operatorCount++;
+      totalOperations = operatorCount;
       operator = operationString[i];
-      if(displayValue != '0')
-      {
-        firstNum = displayValue;
-      }
-      else
-      {
-        firstNum = currentInput;
-      }
       currentInput = '';
       if(operationString[i] == stringStart)
       {
@@ -223,6 +220,7 @@ function manageOperations()
       else
       {
         var previousInput = operationString[i-1];
+
       }
       if(previousInput == '+' || previousInput == '-' || previousInput == '*' || previousInput == '/')
       {
@@ -232,7 +230,45 @@ function manageOperations()
     else
     {
       currentInput = currentInput + operationString[i];
-      secondNum = currentInput;
+      if(displayValue == '0')
+      {
+        if(operatorCount == 1)
+        {
+          firstNum = operationString.slice(0, operationString[i]);
+          secondNum = currentInput;
+        }
+        else if(operatorCount == 2)
+        {
+          if(operationString.includes('*') && operationString.includes('+'))
+          {
+            multLocation = operationString.indexOf('*');
+            plusLocation = operationString.indexOf('+');
+            if(plusLocation > multLocation)
+            {
+              tempString = operationString.slice(0, plusLocation);
+              operand1 = operationString.slice(0, multLocation);
+              operand2 = operationString.slice(multLocation+1, plusLocation);
+              temp = operate(operand1, operand2, '*');
+              firstNum = temp;
+              secondNum = currentInput;
+            }
+            else
+            {
+              tempString = operationString.slice(0, multLocation);
+              operand1 = operationString.slice(plusLocation+1, multLocation);
+              operand2 = currentInput;
+              temp = operate(operand1, operand2, '*');
+              secondNum = temp;
+              firstNum = operationString.slice(0, plusLocation);
+              operator = '+';
+            }
+          }
+        }
+      }
+      else
+      {
+        firstNum = displayValue;
+      }
     }
   }
   var parsedFirst = parseInt(firstNum, 10);
@@ -240,6 +276,17 @@ function manageOperations()
   if(operationString.charAt(operationString.length - 1) != operator)
   {
     solution = operate(parsedFirst, parsedSecond, operator);
+    //console.log(tempString);
+    /*console.log(multLocation);
+    console.log(plusLocation);
+    console.log(tempString);
+    console.log(operand1);
+    console.log(operand2);
+    console.log(temp);
+    console.log(parsedFirst);
+    console.log(parsedSecond);
+    console.log(operatorCount);
+    console.log(totalOperations);*/
     if(solution % 1 === 0)
     {
       displayValue = solution;
