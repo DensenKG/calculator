@@ -134,7 +134,7 @@ function divide(a, b)
   }
   else
   {
-    alert("Thank Douglas Adams.");
+    alert("Congratulations. You have found and/or manipulated the answer to the ultimate question of life, the universe, and everything: 42.");
     disableButtons();
     return 42;
   }
@@ -169,7 +169,7 @@ function updateDisplay()
 
 function clearDisplay()
 {
-  operationString = "";
+  operationString = '';
   displayValue = '0';
   currentInput = '';
 }
@@ -203,16 +203,15 @@ function manageOperations()
   var solution;
   var firstNum;
   var operatorCount = 0;
-  var totalOperations = 0;
 
   for (var i = 0; i < operationString.length; i++)
   {
     if(operationString[i] == '+' || operationString[i] == '-' || operationString[i] == '*' || operationString[i] == '/')
     {
       operatorCount++;
-      totalOperations = operatorCount;
       operator = operationString[i];
       currentInput = '';
+
       if(operationString[i] == stringStart)
       {
         displayValue = 'INVALID';
@@ -230,7 +229,8 @@ function manageOperations()
     else
     {
       currentInput = currentInput + operationString[i];
-      if(displayValue == '0')
+
+      if(displayValue == '0' || displayValue == '')
       {
         if(operatorCount == 1)
         {
@@ -245,7 +245,6 @@ function manageOperations()
             plusLocation = operationString.indexOf('+');
             if(plusLocation > multLocation)
             {
-              tempString = operationString.slice(0, plusLocation);
               operand1 = operationString.slice(0, multLocation);
               operand2 = operationString.slice(multLocation+1, plusLocation);
               temp = operate(operand1, operand2, '*');
@@ -254,7 +253,6 @@ function manageOperations()
             }
             else
             {
-              tempString = operationString.slice(0, multLocation);
               operand1 = operationString.slice(plusLocation+1, multLocation);
               operand2 = currentInput;
               temp = operate(operand1, operand2, '*');
@@ -263,30 +261,175 @@ function manageOperations()
               operator = '+';
             }
           }
+          else if(operationString.includes('*') && operationString.includes('-'))
+          {
+            multLocation = operationString.indexOf('*');
+            minusLocation = operationString.indexOf('-');
+            if(minusLocation > multLocation)
+            {
+              operand1 = operationString.slice(0, multLocation);
+              operand2 = operationString.slice(multLocation+1, minusLocation);
+              temp = operate(operand1, operand2, '*');
+              firstNum = temp;
+              secondNum = currentInput;
+            }
+            else
+            {
+              operand1 = operationString.slice(minusLocation+1, multLocation);
+              operand2 = currentInput;
+              temp = operate(operand1, operand2, '*');
+              secondNum = temp;
+              firstNum = operationString.slice(0, minusLocation);
+              operator = '-';
+            }
+          }
+          else if(operationString.includes('*') && operationString.includes('/'))
+          {
+            multLocation = operationString.indexOf('*');
+            divideLocation = operationString.indexOf('/');
+
+            if(divideLocation > multLocation)
+            {
+              operand1 = operationString.slice(0, multLocation);
+              operand2 = operationString.slice(multLocation+1, divideLocation);
+              temp = operate(operand1, operand2, '*');
+              firstNum = temp;
+              secondNum = currentInput;
+            }
+            else
+            {
+              operand1 = operationString.slice(0, divideLocation);
+              operand2 = operationString.slice(divideLocation+1, multLocation);
+              temp = operate(operand1, operand2, '/');
+              firstNum = temp;
+              secondNum = currentInput;
+              operator = '*';
+            }
+          }
+          else if(operationString.includes('*') && operationString.includes('*'))
+          {
+            firstMult = operationString.indexOf('*');
+            secondMult = operationString.indexOf('*', firstMult+1);
+            operand1 = operationString.slice(0, firstMult);
+            operand2 = operationString.slice(firstMult+1, secondMult);
+            temp = operate(operand1, operand2, '*');
+            firstNum = temp;
+            secondNum = currentInput;
+          }
+          else if(operationString.includes('/') && operationString.includes('+'))
+          {
+            divideLocation = operationString.indexOf('/');
+            plusLocation = operationString.indexOf('+');
+            if(plusLocation > divideLocation)
+            {
+              operand1 = operationString.slice(0, divideLocation);
+              operand2 = operationString.slice(divideLocation+1, plusLocation);
+              temp = operate(operand1, operand2, '/');
+              firstNum = temp;
+              secondNum = currentInput;
+              operator = '+';
+            }
+            else
+            {
+              operand1 = operationString.slice(plusLocation+1, divideLocation);
+              operand2 = currentInput;
+              temp = operate(operand1, operand2, '/');
+              firstNum = temp;
+              secondNum = operationString.slice(0, plusLocation);
+              operator = '+';
+            }
+          }
+          else if(operationString.includes('/') && operationString.includes('-'))
+          {
+            divideLocation = operationString.indexOf('/');
+            minusLocation = operationString.indexOf('-');
+            if(minusLocation > divideLocation)
+            {
+              operand1 = operationString.slice(0, divideLocation);
+              operand2 = operationString.slice(divideLocation+1, minusLocation);
+              temp = operate(operand1, operand2, '/');
+              firstNum = temp;
+              secondNum = currentInput;
+              operator = '-';
+            }
+            else
+            {
+              operand1 = operationString.slice(minusLocation+1, divideLocation);
+              operand2 = currentInput;
+              temp = operate(operand1, operand2, '/');
+              firstNum = temp;
+              secondNum = operationString.slice(0, minusLocation);
+              operator = '-';
+            }
+          }
+          else if(operationString.includes('/') && operationString.includes('/'))
+          {
+            firstDivide = operationString.indexOf('/');
+            secondDivide = operationString.indexOf('/', firstDivide+1);
+            operand1 = operationString.slice(0, firstDivide);
+            operand2 = operationString.slice(firstDivide+1, secondDivide);
+            temp = operate(operand1, operand2, '/');
+            firstNum = temp;
+            secondNum = currentInput;
+          }
+          else if(operationString.includes('-') && operationString.includes('+'))
+          {
+            minusLocation = operationString.indexOf('-');
+            plusLocation = operationString.indexOf('+');
+            if(minusLocation > plusLocation)
+            {
+              operand1 = parseFloat(operationString.slice(0, plusLocation));
+              operand2 = parseFloat(operationString.slice(plusLocation+1, minusLocation));
+              temp = operate(operand1, operand2, '+');
+              firstNum = temp;
+              secondNum = currentInput;
+            }
+            else
+            {
+              operand1 = operationString.slice(0, minusLocation);
+              operand2 = operationString.slice(minusLocation+1, plusLocation);
+              temp = operate(operand1, operand2, '-');
+              firstNum = temp;
+              secondNum = currentInput;
+            }
+          }
+          else if(operationString.includes('-') && operationString.includes('-'))
+          {
+            firstMinus = operationString.indexOf('-');
+            secondMinus = operationString.indexOf('-', firstMinus+1);
+            operand1 = operationString.slice(0, firstMinus);
+            operand2 = operationString.slice(firstMinus+1, secondMinus);
+            temp = operate(operand1, operand2, '-');
+            firstNum = temp;
+            secondNum = currentInput;
+          }
+          else
+          {
+            firstPlus = operationString.indexOf('+');
+            secondPlus = operationString.indexOf('+', firstPlus+1);
+            operand1 = parseFloat(operationString.slice(0, firstPlus));
+            operand2 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+            temp = operate(operand1, operand2, '+');
+            firstNum = temp;
+            secondNum = currentInput;
+          }
         }
       }
       else
       {
         firstNum = displayValue;
+        displayValue = '';
       }
     }
   }
-  var parsedFirst = parseInt(firstNum, 10);
-  var parsedSecond = parseInt(secondNum, 10);
+
+  var parsedFirst = parseFloat(firstNum, 10);
+  var parsedSecond = parseFloat(secondNum, 10);
+
   if(operationString.charAt(operationString.length - 1) != operator)
   {
     solution = operate(parsedFirst, parsedSecond, operator);
-    //console.log(tempString);
-    /*console.log(multLocation);
-    console.log(plusLocation);
-    console.log(tempString);
-    console.log(operand1);
-    console.log(operand2);
-    console.log(temp);
-    console.log(parsedFirst);
-    console.log(parsedSecond);
-    console.log(operatorCount);
-    console.log(totalOperations);*/
+
     if(solution % 1 === 0)
     {
       displayValue = solution;
@@ -295,6 +438,7 @@ function manageOperations()
     {
       displayValue = solution.toFixed(4);
     }
+    operationString = displayValue.toString();
   }
   else
   {
