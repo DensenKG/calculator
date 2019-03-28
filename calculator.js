@@ -414,6 +414,55 @@ function manageOperations()
             secondNum = currentInput;
           }
         }
+        else if(operatorCount == 3)
+        {
+          if(operationString.includes('+') && operationString.includes('+'))
+          {
+            firstPlus = operationString.indexOf('+');
+            secondPlus = operationString.indexOf('+', firstPlus+1);
+            if(operationString.includes('+'))
+            {
+              thirdPlus = operationString.indexOf('+', secondPlus+1);
+              operand1 = parseFloat(operationString.slice(0, firstPlus));
+              operand2 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+              operand3 = parseFloat(operationString.slice(secondPlus+1, thirdPlus));
+              temp = operate(operand1, operand2, '+');
+              firstNum = operate(temp, operand3, '+');
+              secondNum = currentInput;
+            }
+            if(operationString.includes('-'))
+            {
+              minusLocation = operationString.indexOf('-');
+              if(minusLocation < firstPlus)
+              {
+                operand1 = parseFloat(operationString.slice(0, minusLocation));
+                operand2 = parseFloat(operationString.slice(minusLocation+1, firstPlus));
+                operand3 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+                temp = operate(operand1, operand2, '-');
+                firstNum = operate(temp, operand3, '+');
+                secondNum = currentInput;
+              }
+              else if(minusLocation > firstPlus && minusLocation < secondPlus)
+              {
+                operand1 = parseFloat(operationString.slice(0, firstPlus));
+                operand2 = parseFloat(operationString.slice(firstPlus+1, minusLocation));
+                operand3 = parseFloat(operationString.slice(minusLocation+1, secondPlus));
+                temp = operate(operand1, operand2, '+');
+                firstNum = operate(temp, operand3, '-');
+                secondNum = currentInput;
+              }
+              else
+              {
+                operand1 = parseFloat(operationString.slice(0, firstPlus));
+                operand2 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+                operand3 = parseFloat(operationString.slice(secondPlus+1, minusLocation));
+                temp = operate(operand1, operand2, '+');
+                firstNum = operate(temp, operand3, '+');
+                secondNum = currentInput;
+              }
+            }
+          }
+        }
       }
       else
       {
