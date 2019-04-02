@@ -461,6 +461,184 @@ function manageOperations()
                 secondNum = currentInput;
               }
             }
+            if(operationString.includes('*'))
+            {
+              multLocation = operationString.indexOf('*');
+              if(multLocation < firstPlus)
+              {
+                operand1 = parseFloat(operationString.slice(0, multLocation));
+                operand2 = parseFloat(operationString.slice(multLocation+1, firstPlus));
+                operand3 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+                temp = operate(operand1, operand2, '*');
+                firstNum = operate(temp, operand3, '+');
+                secondNum = currentInput;
+              }
+              else if(multLocation > firstPlus && multLocation < secondPlus)
+              {
+                operand1 = parseFloat(operationString.slice(firstPlus+1, multLocation));
+                operand2 = parseFloat(operationString.slice(multLocation+1, secondPlus));
+                operand3 = parseFloat(operationString.slice(0, firstPlus));
+                temp = operate(operand1, operand2, '*');
+                firstNum = operate(temp, operand3, '+');
+                secondNum = currentInput;
+              }
+              else
+              {
+                operand1 = parseFloat(operationString.slice(secondPlus+1, multLocation));
+                operand2 = currentInput;
+                temp = operate(operand1, operand2, '*');
+                operand3 = parseFloat(operationString.slice(0, firstPlus));
+                operand4 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+                firstNum = operate(temp, operand3, '+');
+                secondNum = operand4;
+                operator = '+';
+              }
+            }
+            if(operationString.includes('/'))
+            {
+              divideLocation = operationString.indexOf('/');
+              if(divideLocation < firstPlus)
+              {
+                operand1 = parseFloat(operationString.slice(0, divideLocation));
+                operand2 = parseFloat(operationString.slice(divideLocation+1, firstPlus));
+                operand3 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+                temp = operate(operand1, operand2, '/');
+                firstNum = operate(temp, operand3, '+');
+                secondNum = currentInput;
+              }
+              else if(divideLocation > firstPlus && divideLocation < secondPlus)
+              {
+                operand1 = parseFloat(operationString.slice(firstPlus+1, divideLocation));
+                operand2 = parseFloat(operationString.slice(divideLocation+1, secondPlus));
+                operand3 = parseFloat(operationString.slice(0, firstPlus));
+                temp = operate(operand1, operand2, '/');
+                firstNum = operate(temp, operand3, '+');
+                secondNum = currentInput;
+              }
+              else
+              {
+                operand1 = parseFloat(operationString.slice(secondPlus+1, divideLocation));
+                operand2 = currentInput;
+                temp = operate(operand1, operand2, '/');
+                operand3 = parseFloat(operationString.slice(0, firstPlus));
+                operand4 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
+                firstNum = operate(temp, operand3, '+');
+                secondNum = operand4;
+                operator = '+';
+              }
+            }
+          }
+          if(operationString.includes('-') && operationString.includes('-'))
+          {
+            firstMinus = operationString.indexOf('-');
+            secondMinus = operationString.indexOf('-', firstMinus+1);
+            if(operationString.includes('+'))
+            {
+              plusLocation = operationString.indexOf('+');
+              if(plusLocation < firstMinus)
+              {
+                operand1 = parseFloat(operationString.slice(0, plusLocation));
+                operand2 = parseFloat(operationString.slice(plusLocation+1, firstMinus));
+                operand3 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
+                temp = operate(operand1, operand2, '+');
+                firstNum = operate(temp, operand3, '-');
+                secondNum = currentInput;
+              }
+              else if(plusLocation > firstMinus && plusLocation < secondMinus)
+              {
+                operand1 = parseFloat(operationString.slice(0, firstMinus));
+                operand2 = parseFloat(operationString.slice(firstMinus+1, plusLocation));
+                operand3 = parseFloat(operationString.slice(plusLocation+1, secondMinus));
+                temp = operate(operand1, operand2, '-');
+                firstNum = operate(temp, operand3, '+');
+                secondNum = currentInput;
+              }
+              else
+              {
+                operand1 = parseFloat(operationString.slice(0, firstMinus));
+                operand2 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
+                operand3 = parseFloat(operationString.slice(secondMinus+1, plusLocation));
+                temp = operate(operand1, operand2, '-');
+                firstNum = operate(temp, operand3, '-');
+                secondNum = currentInput;
+              }
+            }
+            if(operationString.includes('-'))
+            {
+              thirdMinus = operationString.indexOf('-', secondMinus+1);
+              operand1 = parseFloat(operationString.slice(0, firstMinus));
+              operand2 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
+              operand3 = parseFloat(operationString.slice(secondMinus+1, thirdMinus));
+              temp = operate(operand1, operand2, '-');
+              firstNum = operate(temp, operand3, '-');
+              secondNum = currentInput;
+            }
+            if(operationString.includes('*'))
+            {
+              multLocation = operationString.indexOf('*');
+              if(multLocation < firstMinus)
+              {
+                operand1 = parseFloat(operationString.slice(0, multLocation));
+                operand2 = parseFloat(operationString.slice(multLocation+1, firstMinus));
+                operand3 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
+                temp = operate(operand1, operand2, '*');
+                firstNum = operate(temp, operand3, '-');
+                secondNum = currentInput;
+              }
+              else if(multLocation > firstMinus && multLocation < secondMinus)
+              {
+                operand1 = parseFloat(operationString.slice(firstMinus+1, multLocation));
+                operand2 = parseFloat(operationString.slice(multLocation+1, secondMinus));
+                operand3 = parseFloat(operationString.slice(0, firstMinus));
+                temp = operate(operand1, operand2, '*');
+                firstNum = operate(operand3, temp, '-');
+                secondNum = currentInput;
+              }
+              else
+              {
+                operand1 = parseFloat(operationString.slice(secondMinus+1, multLocation));
+                operand2 = currentInput;
+                temp = operate(operand1, operand2, '*');
+                operand3 = parseFloat(operationString.slice(0, firstMinus));
+                operand4 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
+                firstNum = operate(operand3, operand4, '-');
+                secondNum = temp;
+                operator = '-';
+              }
+            }
+            if(operationString.includes('/'))
+            {
+              divideLocation = operationString.indexOf('/');
+              if(divideLocation < firstMinus)
+              {
+                operand1 = parseFloat(operationString.slice(0, divideLocation));
+                operand2 = parseFloat(operationString.slice(divideLocation+1, firstMinus));
+                operand3 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
+                temp = operate(operand1, operand2, '/');
+                firstNum = operate(temp, operand3, '-');
+                secondNum = currentInput;
+              }
+              else if(divideLocation > firstMinus && divideLocation < secondMinus)
+              {
+                operand1 = parseFloat(operationString.slice(firstMinus+1, divideLocation));
+                operand2 = parseFloat(operationString.slice(divideLocation+1, secondMinus));
+                operand3 = parseFloat(operationString.slice(0, firstMinus));
+                temp = operate(operand1, operand2, '/');
+                firstNum = operate(operand3, temp, '-');
+                secondNum = currentInput;
+              }
+              else
+              {
+                operand1 = parseFloat(operationString.slice(secondMinus+1, divideLocation));
+                operand2 = currentInput;
+                temp = operate(operand1, operand2, '/');
+                operand3 = parseFloat(operationString.slice(0, firstMinus));
+                operand4 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
+                firstNum = operate(operand3, operand4, '-');
+                secondNum = temp;
+                operator = '-';
+              }
+            }
           }
         }
       }
