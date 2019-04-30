@@ -446,53 +446,328 @@ function manageOperations()
               divCount++;
             }
           }
-          if(plusCount == 3)
+          if(plusCount == 1 && minusCount == 1)
           {
-            firstPlus = operationString.indexOf('+');
-            secondPlus = operationString.indexOf('+', firstPlus+1);
-            thirdPlus = operationString.indexOf('+', secondPlus+1);
-            operand1 = parseFloat(operationString.slice(0, firstPlus));
-            operand2 = parseFloat(operationString.slice(firstPlus+1, secondPlus));
-            operand3 = parseFloat(operationString.slice(secondPlus+1, thirdPlus));
-            temp = operate(operand1, operand2, '+');
-            firstNum = operate(temp, operand3, '+');
-            secondNum = currentInput;
+            plusLocation = operationString.indexOf('+');
+            minusLocation = operationString.indexOf('-');
+            if(multCount == 1)
+            {
+              priorityOp = '*';
+            }
+            if(divCount == 1)
+            {
+              priorityOp = '/';
+            }
+            priorityOpLoc = operationString.indexOf(priorityOp);
+            if(priorityOpLoc < plusLocation && plusLocation < minusLocation
+            || priorityOpLoc < minusLocation && minusLocation < plusLocation)
+            {
+              if(priorityOpLoc < plusLocation && plusLocation < minusLocation)
+              {
+                closestOp = '+';
+                furthestOp = '-';
+              }
+              else
+              {
+                closestOp = '-'
+                furthestOp = '+';
+              }
+              closestOpLoc = operationString.indexOf(closestOp);
+              furthestOpLoc = operationString.indexOf(furthestOp);
+              operand1 = parseFloat(operationString.slice(0, priorityOpLoc));
+              operand2 = parseFloat(operationString.slice(priorityOpLoc+1, closestOpLoc));
+              operand3 = parseFloat(operationString.slice(closestOpLoc+1, furthestOpLoc));
+              temp = operate(operand1, operand2, priorityOp);
+              firstNum = operate(temp, operand3, closestOp);
+              secondNum = currentInput;
+            }
+            else if(priorityOpLoc > plusLocation && plusLocation < minusLocation
+            || priorityOpLoc > minusLocation && minusLocation < plusLocation)
+            {
+              if(priorityOpLoc > plusLocation && plusLocation < minusLocation)
+              {
+                precedingOp = '+';
+                followingOp = '-';
+              }
+              else
+              {
+                precedingOp = '-';
+                followingOp = '+';
+              }
+              precedingOpLoc = operationString.indexOf(precedingOp);
+              followingOpLoc = operationString.indexOf(followingOp);
+              operand1 = parseFloat(operationString.slice(0, precedingOpLoc));
+              operand2 = parseFloat(operationString.slice(precedingOpLoc+1, priorityOpLoc));
+              operand3 = parseFloat(operationString.slice(priorityOpLoc+1, followingOpLoc));
+              temp = operate(operand2, operand3, priorityOp);
+              firstNum = operate(operand1, temp, precedingOp);
+              secondNum = currentInput;
+              operator = followingOp;
+            }
+            if(priorityOpLoc > plusLocation && plusLocation > minusLocation
+            || priorityOpLoc > minusLocation && minusLocation > plusLocation)
+            {
+              if(priorityOpLoc > plusLocation && plusLocation > minusLocation)
+              {
+                closestOp = '+';
+                furthestOp = '-';
+              }
+              else
+              {
+                closestOp = '-';
+                furthestOp = '+';
+              }
+              closestOpLoc = operationString.indexOf(closestOp);
+              furthestOpLoc = operationString.indexOf(furthestOp);
+              operand1 = parseFloat(operationString.slice(0, furthestOpLoc));
+              operand2 = parseFloat(operationString.slice(furthestOpLoc+1, closestOpLoc));
+              operand3 = parseFloat(operationString.slice(closestOpLoc+1, priorityOpLoc));
+              operand4 = currentInput;
+              temp = operate(operand3, operand4, priorityOp);
+              temp2 = operate(operand1, operand2, furthestOp);
+              firstNum = temp2;
+              secondNum = temp;
+              operator = closestOp;
+            }
           }
-          if(minusCount == 3)
+          if(multCount == 1 && divCount == 1)
           {
-            firstMinus = operationString.indexOf('-');
-            secondMinus = operationString.indexOf('-', firstMinus+1);
-            thirdMinus = operationString.indexOf('-', secondMinus+1);
-            operand1 = parseFloat(operationString.slice(0, firstMinus));
-            operand2 = parseFloat(operationString.slice(firstMinus+1, secondMinus));
-            operand3 = parseFloat(operationString.slice(secondMinus+1, thirdMinus));
-            temp = operate(operand1, operand2, '-');
-            firstNum = operate(temp, operand3, '-');
-            secondNum = currentInput;
+            multLocation = operationString.indexOf('*');
+            divideLocation = operationString.indexOf('/');
+            if(plusCount == 1)
+            {
+              leastPriorityOp = '+';
+            }
+            if(minusCount == 1)
+            {
+              leastPriorityOp = '-';
+            }
+            leastPriorityOpLoc = operationString.indexOf(leastPriorityOp);
+            if(leastPriorityOpLoc < multLocation && multLocation < divideLocation
+            || leastPriorityOpLoc < divideLocation && divideLocation < multLocation)
+            {
+              if(leastPriorityOpLoc < multLocation && multLocation < divideLocation)
+              {
+                closestOp = '*';
+                furthestOp = '/';
+              }
+              else
+              {
+                closestOp = '/';
+                furthestOp = '*';
+              }
+              closestOpLoc = operationString.indexOf(closestOp);
+              furthestOpLoc = operationString.indexOf(furthestOp);
+              operand1 = parseFloat(operationString.slice(0, leastPriorityOpLoc));
+              operand2 = parseFloat(operationString.slice(leastPriorityOpLoc+1, closestOpLoc));
+              operand3 = parseFloat(operationString.slice(closestOpLoc+1, furthestOpLoc));
+              operand4 = currentInput;
+              temp = operate(operand2, operand3, closestOp);
+              firstNum = operand1;
+              secondNum = operate(temp, operand4, furthestOp);
+              operator = leastPriorityOp;
+            }
+            else if(leastPriorityOpLoc > multLocation && multLocation < divideLocation
+            || leastPriorityOpLoc > divideLocation && divideLocation < multLocation)
+            {
+              if(leastPriorityOpLoc > multLocation && multLocation < divideLocation)
+              {
+                precedingOp = '*';
+                followingOp = '/';
+              }
+              else
+              {
+                precedingOp = '/';
+                followingOp = '*';
+              }
+              precedingOpLoc = operationString.indexOf(precedingOp);
+              followingOpLoc = operationString.indexOf(followingOp);
+              operand1 = parseFloat(operationString.slice(0, precedingOpLoc));
+              operand2 = parseFloat(operationString.slice(precedingOpLoc+1, leastPriorityOpLoc));
+              operand3 = parseFloat(operationString.slice(leastPriorityOpLoc+1, followingOpLoc));
+              operand4 = currentInput;
+              temp = operate(operand1, operand2, precedingOp);
+              firstNum = temp;
+              secondNum = operate(operand3, operand4, followingOp);
+              operator = leastPriorityOp;
+            }
+            if(leastPriorityOpLoc > multLocation && multLocation > divideLocation
+            || leastPriorityOpLoc > divideLocation && divideLocation > multLocation)
+            {
+              if(leastPriorityOpLoc > multLocation && multLocation > divideLocation)
+              {
+                closestOp = '*';
+                furthestOp = '/';
+              }
+              else
+              {
+                closestOp = '/';
+                furthestOp = '*';
+              }
+              closestOpLoc = operationString.indexOf(closestOp);
+              furthestOpLoc = operationString.indexOf(furthestOp);
+              operand1 = parseFloat(operationString.slice(0, furthestOpLoc));
+              operand2 = parseFloat(operationString.slice(furthestOpLoc+1, closestOpLoc));
+              operand3 = parseFloat(operationString.slice(closestOpLoc+1, leastPriorityOpLoc));
+              temp = operate(operand1, operand2, furthestOp);
+              firstNum = operate(temp, operand3, closestOp);
+              secondNum = currentInput;
+            }
           }
-          if(multCount == 3)
+          if(plusCount >= 2 || minusCount >=2 || multCount >=2 || divCount >= 2)
           {
-            firstMult = operationString.indexOf('*');
-            secondMult = operationString.indexOf('*', firstMult+1);
-            thirdMult = operationString.indexOf('*', secondMult+1);
-            operand1 = parseFloat(operationString.slice(0, firstMult));
-            operand2 = parseFloat(operationString.slice(firstMult+1, secondMult));
-            operand3 = parseFloat(operationString.slice(secondMult+1, thirdMult));
-            temp = operate(operand1, operand2, '*');
-            firstNum = operate(temp, operand3, '*');
-            secondNum = currentInput;
-          }
-          if(divCount == 3)
-          {
-            firstDivide = operationString.indexOf('/');
-            secondDivide = operationString.indexOf('/', firstDivide+1);
-            thirdDivide = operationString.indexOf('/', secondDivide+1);
-            operand1 = parseFloat(operationString.slice(0, firstDivide));
-            operand2 = parseFloat(operationString.slice(firstDivide+1, secondDivide));
-            operand3 = parseFloat(operationString.slice(secondDivide+1, thirdDivide));
-            temp = operate(operand1, operand2, '/');
-            firstNum = operate(temp, operand3, '/');
-            secondNum = currentInput;
+            if(plusCount >=2)
+            {
+              majorityOp = '+';
+              majorityCount = plusCount;
+            }
+            if(minusCount >= 2)
+            {
+              majorityOp = '-';
+              majorityCount = minusCount;
+            }
+            if(multCount >= 2)
+            {
+              majorityOp = '*';
+              majorityCount = multCount;
+            }
+            if(divCount >=2)
+            {
+              majorityOp = '/';
+              majorityCount = divCount;
+            }
+            majorityOpLoc1 = operationString.indexOf(majorityOp);
+            majorityOpLoc2 = operationString.indexOf(majorityOp, majorityOpLoc1+1);
+            if(majorityCount == 3)
+            {
+              majorityOpLoc3 = operationString.indexOf(majorityOp, majorityOpLoc2+1);
+              operand1 = parseFloat(operationString.slice(0, majorityOpLoc1));
+              operand2 = parseFloat(operationString.slice(majorityOpLoc1+1, majorityOpLoc2));
+              operand3 = parseFloat(operationString.slice(majorityOpLoc2+1, majorityOpLoc3));
+              temp = operate(operand1, operand2, majorityOp);
+              firstNum = operate(temp, operand3, majorityOp);
+              secondNum = currentInput;
+            }
+            else
+            {
+              if(plusCount == 1)
+              {
+                minorityOp = '+';
+              }
+              if(minusCount == 1)
+              {
+                minorityOp = '-';
+              }
+              if(multCount == 1)
+              {
+                minorityOp = '*';
+              }
+              if(divCount == 1)
+              {
+                minorityOp = '/';
+              }
+              minorityOpLoc = operationString.indexOf(minorityOp);
+              if(majorityOp == '+' && minorityOp == '-' || majorityOp == '-' && minorityOp == '+'
+              || majorityOp == '*' && minorityOp == '/' || majorityOp == '/' && minorityOp == '*')
+              {
+                if(minorityOpLoc < majorityOpLoc1)
+                {
+                  operand1 = parseFloat(operationString.slice(0, minorityOpLoc));
+                  operand2 = parseFloat(operationString.slice(minorityOpLoc+1, majorityOpLoc1));
+                  operand3 = parseFloat(operationString.slice(majorityOpLoc1+1, majorityOpLoc2));
+                  temp = operate(operand1, operand2, minorityOp);
+                  firstNum = operate(temp, operand3, majorityOp);
+                  secondNum = currentInput;
+                }
+                else if(minorityOpLoc > majorityOpLoc1 && minorityOpLoc < majorityOpLoc2)
+                {
+                  operand1 = parseFloat(operationString.slice(0, majorityOpLoc1));
+                  operand2 = parseFloat(operationString.slice(majorityOpLoc1+1, minorityOpLoc));
+                  operand3 = parseFloat(operationString.slice(minorityOpLoc+1, majorityOpLoc2));
+                  temp = operate(operand1, operand2, majorityOp);
+                  firstNum = operate(temp, operand3, minorityOp);
+                  secondNum = currentInput;
+                }
+                else
+                {
+                  operand1 = parseFloat(operationString.slice(0, majorityOpLoc1));
+                  operand2 = parseFloat(operationString.slice(majorityOpLoc1+1, majorityOpLoc2));
+                  operand3 = parseFloat(operationString.slice(majorityOpLoc2+1, minorityOpLoc));
+                  temp = operate(operand1, operand2, majorityOp);
+                  firstNum = operate(temp, operand3, majorityOp);
+                  secondNum = currentInput;
+                }
+              }
+              if(majorityOp == '+' && minorityOp == '*' || majorityOp == '-' && minorityOp == '*'
+              || majorityOp == '+' && minorityOp == '/' || majorityOp == '-' && minorityOp == '/')
+              {
+                if(minorityOpLoc < majorityOpLoc1)
+                {
+                  operand1 = parseFloat(operationString.slice(0, minorityOpLoc));
+                  operand2 = parseFloat(operationString.slice(minorityOpLoc+1, majorityOpLoc1));
+                  operand3 = parseFloat(operationString.slice(majorityOpLoc1+1, majorityOpLoc2));
+                  temp = operate(operand1, operand2, minorityOp);
+                  firstNum = operate(temp, operand3, majorityOp);
+                  secondNum = currentInput;
+                }
+                else if(minorityOpLoc > majorityOpLoc1 && minorityOpLoc < majorityOpLoc2)
+                {
+                  operand1 = parseFloat(operationString.slice(0, majorityOpLoc1));
+                  operand2 = parseFloat(operationString.slice(majorityOpLoc1+1, minorityOpLoc));
+                  operand3 = parseFloat(operationString.slice(minorityOpLoc+1, majorityOpLoc2));
+                  temp = operate(operand2, operand3, minorityOp);
+                  firstNum = operate(operand1, temp, majorityOp);
+                  secondNum = currentInput;
+                }
+                else
+                {
+                  operand1 = parseFloat(operationString.slice(0, majorityOpLoc1));
+                  operand2 = parseFloat(operationString.slice(majorityOpLoc1+1, majorityOpLoc2));
+                  operand3 = parseFloat(operationString.slice(majorityOpLoc2+1, minorityOpLoc));
+                  operand4 = currentInput;
+                  temp = operate(operand3, operand4, minorityOp);
+                  firstNum = operate(operand1, operand2, majorityOp);
+                  secondNum = temp;
+                  operator = majorityOp;
+                }
+              }
+              if(majorityOp == '*' && minorityOp == '+' || majorityOp == '*' && minorityOp == '-'
+              || majorityOp == '/' && minorityOp == '+' || majorityOp == '/' && minorityOp == '-')
+              {
+                if(minorityOpLoc < majorityOpLoc1)
+                {
+                  operand1 = parseFloat(operationString.slice(0, minorityOpLoc));
+                  operand2 = parseFloat(operationString.slice(minorityOpLoc+1, majorityOpLoc1));
+                  operand3 = parseFloat(operationString.slice(majorityOpLoc1+1, majorityOpLoc2));
+                  operand4 = currentInput;
+                  temp = operate(operand2, operand3, majorityOp);
+                  firstNum = operand1;
+                  secondNum = operate(temp, operand4, majorityOp);
+                  operator = minorityOp;
+                }
+                else if(minorityOpLoc > majorityOpLoc1 && minorityOpLoc < majorityOpLoc2)
+                {
+                  operand1 = parseFloat(operationString.slice(0, majorityOpLoc1));
+                  operand2 = parseFloat(operationString.slice(majorityOpLoc1+1, minorityOpLoc));
+                  operand3 = parseFloat(operationString.slice(minorityOpLoc+1, majorityOpLoc2));
+                  operand4 = currentInput;
+                  temp = operate(operand1, operand2, majorityOp);
+                  temp2 = operate(operand3, operand4, majorityOp);
+                  firstNum = temp;
+                  secondNum = temp2;
+                  operator = minorityOp;
+                }
+                else
+                {
+                  operand1 = parseFloat(operationString.slice(0, majorityOpLoc1));
+                  operand2 = parseFloat(operationString.slice(majorityOpLoc1+1, majorityOpLoc2));
+                  operand3 = parseFloat(operationString.slice(majorityOpLoc2+1, minorityOpLoc));
+                  temp = operate(operand1, operand2, majorityOp);
+                  firstNum = operate(temp, operand3, majorityOp);
+                  secondNum = currentInput;
+                }
+              }
+            }
           }
         }
       }
