@@ -7,6 +7,7 @@ let numColumns = numRows;
 let operationString = '';
 let currentInput = '';
 let displayValue = '0';
+let operationsPressed = 0;
 document.body.onload = createCalculator;
 
 function createCalculator()
@@ -177,6 +178,7 @@ function clearDisplay()
   minusCount = 0;
   multCount = 0;
   divCount = 0;
+  operationsPressed = 0;
 }
 
 function manageButtonFunctionality()
@@ -188,10 +190,21 @@ function manageButtonFunctionality()
     }
     else if(e.target.id == "equals-button")
     {
-      manageOperations();
+      if(operationsPressed < 4)
+      {
+        manageOperations();
+      }
+      else
+      {
+        alert("Expressions with more than three operators cannot be evaluated. Please reduce the number of operators.");
+      }
     }
     else
     {
+      if(e.target.id == "add-button" || e.target.id == "sub-button" || e.target.id == "mult-button" || e.target.id == "divide-button")
+      {
+        operationsPressed++;
+      }
       if(operationString.length <= 20)
       {
         operationString += e.target.textContent;
