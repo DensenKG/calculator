@@ -2,12 +2,14 @@ let calcContainer = document.querySelector('#calc-container');
 let calcDisplay = document.getElementById('calc-display');
 let displayTop = document.getElementById('display-top');
 let displayBottom = document.getElementById('display-bottom');
-let numRows = 4;
-let numColumns = numRows;
+let numRows = 5;
+let numColumns = 4;
 let operationString = '';
 let currentInput = '';
 let displayValue = '0';
 let operationsPressed = 0;
+let decimalCount = 0;
+let languageSetting = "English";
 document.body.onload = createCalculator;
 
 function createCalculator()
@@ -16,7 +18,6 @@ function createCalculator()
   updateDisplay();
   manageButtonFunctionality();
 }
-
 
 function createButtons()
 {
@@ -41,73 +42,93 @@ function labelButtons()
     switch (i)
     {
       case 0:
+        allButtons[i].textContent = "CLR";
+        allButtons[i].setAttribute('id', 'clear-button');
+        allButtons[i].setAttribute('title', "Clear");
+        break;
+      case 1:
+        allButtons[i].textContent = "ENG";
+        allButtons[i].setAttribute('id', 'english-button');
+        allButtons[i].setAttribute('title', "English");
+        break;
+      case 2:
+        allButtons[i].textContent = "ESP";
+        allButtons[i].setAttribute('id', 'spanish-button');
+        allButtons[i].setAttribute('title', "Spanish");
+        break;
+      case 3:
+        allButtons[i].textContent = "DEL";
+        allButtons[i].setAttribute('id', 'delete-button');
+        allButtons[i].setAttribute('title', 'Delete');
+        break;
+      case 4:
         allButtons[i].textContent = "1";
         allButtons[i].setAttribute('id', 'one-button');
         break;
-      case 1:
+      case 5:
         allButtons[i].textContent = "2";
         allButtons[i].setAttribute('id', 'two-button');
         break;
-      case 2:
+      case 6:
         allButtons[i].textContent = "3";
         allButtons[i].setAttribute('id', 'three-button');
         break;
-      case 3:
+      case 7:
         allButtons[i].textContent = "/";
         allButtons[i].setAttribute('id', 'divide-button');
         allButtons[i].setAttribute('title', "Division");
         break;
-      case 4:
+      case 8:
         allButtons[i].textContent = "4";
         allButtons[i].setAttribute('id', 'four-button');
         break;
-      case 5:
+      case 9:
         allButtons[i].textContent = "5";
         allButtons[i].setAttribute('id', 'five-button');
         break;
-      case 6:
+      case 10:
         allButtons[i].textContent = "6";
         allButtons[i].setAttribute('id', 'six-button');
         break;
-      case 7:
+      case 11:
         allButtons[i].textContent = "*";
         allButtons[i].setAttribute('id', 'mult-button');
         allButtons[i].setAttribute('title', "Multiplication");
         break;
-      case 8:
+      case 12:
         allButtons[i].textContent = "7";
         allButtons[i].setAttribute('id', 'seven-button');
         break;
-      case 9:
+      case 13:
         allButtons[i].textContent = "8";
         allButtons[i].setAttribute('id', 'eight-button');
         break;
-      case 10:
+      case 14:
         allButtons[i].textContent = "9";
         allButtons[i].setAttribute('id', 'nine-button');
         break;
-      case 11:
+      case 15:
         allButtons[i].textContent = "-";
         allButtons[i].setAttribute('id', 'sub-button');
         allButtons[i].setAttribute('title', "Subtraction");
         break;
-      case 12:
-        allButtons[i].textContent = "C";
-        allButtons[i].setAttribute('id', 'clear-button');
-        allButtons[i].setAttribute('title', "Clear");
+      case 16:
+        allButtons[i].textContent = '.';
+        allButtons[i].setAttribute('id', 'decimal-button');
         break;
-      case 13:
+      case 17:
         allButtons[i].textContent = "0";
         allButtons[i].setAttribute('id', 'zero-button');
         break;
-      case 14:
+      case 18:
         allButtons[i].textContent = "=";
         allButtons[i].setAttribute('id', 'equals-button');
         break;
-      case 15:
+      case 19:
         allButtons[i].textContent = "+";
         allButtons[i].setAttribute('id', 'add-button');
         allButtons[i].setAttribute('title', "Addition");
+        break;
     }
   }
 }
@@ -135,7 +156,14 @@ function divide(a, b)
   }
   else
   {
-    alert("Congratulations. You have found and/or manipulated the answer to the ultimate question of life, the universe, and everything: 42.");
+    if(languageSetting == "English")
+    {
+      alert("Congratulations. You have found and/or manipulated the answer to the ultimate question of life, the universe, and everything: 42.");
+    }
+    else
+    {
+      alert("Felicidades. Ha encontrado (o ha manipulado) la respuesta a la pregunta final de la vida, el universo y todo lo demás: 42.");
+    }
     disableButtons();
     return 42;
   }
@@ -179,31 +207,104 @@ function clearDisplay()
   multCount = 0;
   divCount = 0;
   operationsPressed = 0;
+  decimalCount = 0;
 }
 
 function manageButtonFunctionality()
 {
+  var decimalButton = document.getElementById('decimal-button');
   calcContainer.addEventListener("click", function(e){
     if(e.target.id == "clear-button")
     {
       clearDisplay();
+      decimalButton.disabled = false;
     }
     else if(e.target.id == "equals-button")
     {
-      if(operationsPressed < 4)
+      if(operationsPressed != 0)
       {
         manageOperations();
+        operationsPressed = 0;
+        decimalCount = 0;
+        decimalButton.disabled = true;
       }
       else
       {
-        alert("Expressions with more than three operators cannot be evaluated. Please reduce the number of operators.");
+        if(operationsPressed != 0)
+        {
+          if(languageSetting == "English")
+          {
+            alert("Expressions with more than three operators cannot be evaluated. Please reduce the number of operators.");
+          }
+          else
+          {
+            alert("Las expresiones con más de tres operadores no pueden ser evaluado. Por favor reduzca el número de operadores.")
+          }
+        }
       }
+    }
+    else if(e.target.id == "delete-button")
+    {
+      if(operationString != '')
+      {
+        var lastChar = operationString.charAt(operationString.length - 1);
+        if(lastChar == '+' || lastChar == '-' || lastChar == '*' || lastChar == '/')
+        {
+          operationsPressed--;
+          if(operationsPressed < 0)
+          {
+            operationsPressed = 0;
+          }
+          console.log(operationsPressed);
+        }
+        if(lastChar == '.')
+        {
+          decimalCount--;
+          if(decimalCount < 0)
+          {
+            decimalCount = 0;
+          }
+        }
+        operationString = operationString.slice(0, -1);
+      }
+    }
+    else if(e.target.id == "english-button" || e.target.id == "spanish-button")
+    {
+      if(e.target.id == "english-button")
+      {
+        if(languageSetting != "English")
+        {
+          languageSetting = "English";
+        }
+      }
+      else if(e.target.id == "spanish-button")
+      {
+        if(languageSetting != "Spanish")
+        {
+          languageSetting = "Spanish";
+        }
+      }
+      changeLanguage();
     }
     else
     {
       if(e.target.id == "add-button" || e.target.id == "sub-button" || e.target.id == "mult-button" || e.target.id == "divide-button")
       {
         operationsPressed++;
+        console.log(operationsPressed);
+        if(decimalCount <= operationsPressed)
+        {
+          decimalButton.disabled = false;
+        }
+      }
+      if(e.target.id == "decimal-button")
+      {
+        decimalCount++;
+        console.log(decimalCount);
+        if(decimalCount != 0 && decimalCount >= operationsPressed)
+        {
+          e.target.disabled = true;
+        }
       }
       if(operationString.length <= 20)
       {
@@ -220,6 +321,7 @@ function manageOperations()
   var operator;
   var solution;
   var firstNum;
+  var secondNum;
   var operatorCount = 0;
 
   for (var i = 0; i < operationString.length; i++)
@@ -232,7 +334,14 @@ function manageOperations()
 
       if(operationString[i] == stringStart)
       {
-        displayValue = 'INVALID';
+        if(languageSetting == "English")
+        {
+          displayValue = 'INVALID';
+        }
+        else
+        {
+          displayValue = 'INVÁLIDO';
+        }
       }
       else
       {
@@ -241,7 +350,14 @@ function manageOperations()
       }
       if(previousInput == '+' || previousInput == '-' || previousInput == '*' || previousInput == '/')
       {
-        displayValue = 'INVALID';
+        if(languageSetting == "English")
+        {
+          displayValue = 'INVALID';
+        }
+        else
+        {
+          displayValue = 'INVÁLIDO';
+        }
       }
     }
     else
@@ -791,18 +907,32 @@ function manageOperations()
       }
     }
   }
-
-  var parsedFirst = parseFloat(firstNum, 10);
-  var parsedSecond = parseFloat(secondNum, 10);
+  if(firstNum != undefined && secondNum != undefined)
+  {
+    var parsedFirst = parseFloat(firstNum, 10);
+    var parsedSecond = parseFloat(secondNum, 10);
+  }
+  else
+  {
+    if(languageSetting == "English")
+    {
+      displayValue = 'INVALID';
+    }
+    else
+    {
+      displayValue = 'INVÁLIDO';
+    }
+  }
 
   if(operationString.charAt(operationString.length - 1) != operator)
   {
     solution = operate(parsedFirst, parsedSecond, operator);
-    console.log(plusCount);
+    truncatedSolution = solution.toFixed(4);
+    /*console.log(plusCount);
     console.log(minusCount);
     console.log(multCount);
-    console.log(divCount);
-    if(solution.toString().length <= 15)
+    console.log(divCount);*/
+    if(solution.toString().length <= 15 || truncatedSolution.toString().length <= 15)
     {
       if(solution % 1 === 0)
       {
@@ -810,7 +940,17 @@ function manageOperations()
       }
       else
       {
-        displayValue = solution.toFixed(4);
+        var solutionString = solution.toString();
+        var decimalLoc = solutionString.indexOf('.');
+        var afterDecimal = solutionString.slice(decimalLoc+1, -1);
+        if(truncatedSolution.toString().length < solution.toString().length && afterDecimal.length >= 4)
+        {
+          displayValue = truncatedSolution;
+        }
+        else
+        {
+          displayValue = solution;
+        }
       }
       operationString = displayValue.toString();
     }
@@ -822,14 +962,30 @@ function manageOperations()
       }
       else
       {
-        alert("Display capacity exceeded. The solution is: " + solution + " or " + solution.toExponential() + '.\n' + "\nNOTE: The display will be cleared once the alert is closed, so record this value elsewhere if needed.");
+        if(languageSetting == "English")
+        {
+          alert("Display capacity exceeded. The solution is: " + solution + " or " + solution.toExponential() + '.\n' +
+          "\nNOTE: The display will be cleared once the alert is closed, so record this value elsewhere if needed.");
+        }
+        else
+        {
+          alert("La solución ha superado la capacidad del visualizador y es: " + solution + " o " + solution.toExponential() + '.\n' +
+        "\nLe informamos que el visualizador estará limpiado una vez que este aviso está despidido, así que anote este número en otro lugar si es necesario.");
+        }
         clearDisplay();
       }
     }
   }
   else
   {
-    displayValue = 'INVALID';
+    if(languageSetting == "English")
+    {
+      displayValue = 'INVALID';
+    }
+    else
+    {
+      displayValue = 'INVÁLIDO';
+    }
   }
 }
 
@@ -846,9 +1002,50 @@ function disableButtons()
       else
       {
         allButtons[i].addEventListener("click", function(){
-        window.location.reload();
+        for(var i = 0; i < allButtons.length; i++){
+          allButtons[i].disabled = false;
+        }
         });
       }
     }
+  }
+}
+
+function changeLanguage()
+{
+  var englishButton = document.getElementById('english-button');
+  var spanishButton = document.getElementById('spanish-button');
+  var clearButton = document.getElementById('clear-button');
+  var deleteButton = document.getElementById('delete-button');
+  var addButton = document.getElementById('add-button');
+  var subButton = document.getElementById('sub-button');
+  var multButton = document.getElementById('mult-button');
+  var divideButton = document.getElementById('divide-button');
+
+  if(languageSetting == "Spanish")
+  {
+    englishButton.textContent = "ING";
+    englishButton.title = "inglés";
+    spanishButton.title = "español";
+    deleteButton.textContent = "SUPR";
+    deleteButton.title = "suprimir"
+    clearButton.title = "limpiar el visualizador";
+    addButton.title = "adición";
+    subButton.title = "sustracción";
+    multButton.title = "multiplicación";
+    divideButton.title = "división";
+  }
+  else
+  {
+    englishButton.textContent = "ENG";
+    englishButton.title = "English";
+    spanishButton.title = "Spanish";
+    deleteButton.textContent = "DEL";
+    deleteButton.title = "Delete"
+    clearButton.title = "Clear";
+    addButton.title = "Addition";
+    subButton.title = "Subtraction";
+    multButton.title = "Multiplication";
+    divideButton.title = "Division";
   }
 }
