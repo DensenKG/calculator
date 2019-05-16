@@ -50,11 +50,13 @@ function labelButtons()
         allButtons[i].textContent = "ENG";
         allButtons[i].setAttribute('id', 'english-button');
         allButtons[i].setAttribute('title', "English");
+        allButtons[i].classList.add('language-button');
         break;
       case 2:
         allButtons[i].textContent = "ESP";
         allButtons[i].setAttribute('id', 'spanish-button');
         allButtons[i].setAttribute('title', "Spanish");
+        allButtons[i].classList.add('language-button');
         break;
       case 3:
         allButtons[i].textContent = "DEL";
@@ -64,61 +66,75 @@ function labelButtons()
       case 4:
         allButtons[i].textContent = "1";
         allButtons[i].setAttribute('id', 'one-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 5:
         allButtons[i].textContent = "2";
         allButtons[i].setAttribute('id', 'two-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 6:
         allButtons[i].textContent = "3";
         allButtons[i].setAttribute('id', 'three-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 7:
         allButtons[i].textContent = "/";
         allButtons[i].setAttribute('id', 'divide-button');
         allButtons[i].setAttribute('title', "Division");
+        allButtons[i].classList.add('operation-button');
         break;
       case 8:
         allButtons[i].textContent = "4";
         allButtons[i].setAttribute('id', 'four-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 9:
         allButtons[i].textContent = "5";
         allButtons[i].setAttribute('id', 'five-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 10:
         allButtons[i].textContent = "6";
         allButtons[i].setAttribute('id', 'six-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 11:
         allButtons[i].textContent = "*";
         allButtons[i].setAttribute('id', 'mult-button');
         allButtons[i].setAttribute('title', "Multiplication");
+        allButtons[i].classList.add('operation-button');
         break;
       case 12:
         allButtons[i].textContent = "7";
         allButtons[i].setAttribute('id', 'seven-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 13:
         allButtons[i].textContent = "8";
         allButtons[i].setAttribute('id', 'eight-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 14:
         allButtons[i].textContent = "9";
         allButtons[i].setAttribute('id', 'nine-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 15:
         allButtons[i].textContent = "-";
         allButtons[i].setAttribute('id', 'sub-button');
         allButtons[i].setAttribute('title', "Subtraction");
+        allButtons[i].classList.add('operation-button');
         break;
       case 16:
         allButtons[i].textContent = '.';
         allButtons[i].setAttribute('id', 'decimal-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 17:
         allButtons[i].textContent = "0";
         allButtons[i].setAttribute('id', 'zero-button');
+        allButtons[i].classList.add('operand-button');
         break;
       case 18:
         allButtons[i].textContent = "=";
@@ -128,6 +144,7 @@ function labelButtons()
         allButtons[i].textContent = "+";
         allButtons[i].setAttribute('id', 'add-button');
         allButtons[i].setAttribute('title', "Addition");
+        allButtons[i].classList.add('operation-button');
         break;
     }
   }
@@ -221,7 +238,7 @@ function manageButtonFunctionality()
     }
     else if(e.target.id == "equals-button")
     {
-      if(operationsPressed != 0)
+      if(operationsPressed != 0 && operationsPressed <= 3)
       {
         manageOperations();
         operationsPressed = 0;
@@ -238,7 +255,7 @@ function manageButtonFunctionality()
           }
           else
           {
-            alert("Las expresiones con más de tres operadores no pueden ser evaluado. Por favor reduzca el número de operadores.")
+            alert("Las expresiones con más de tres operadores no pueden ser evaluado. Por favor reduzca el número de operadores.");
           }
         }
       }
@@ -292,6 +309,7 @@ function manageButtonFunctionality()
       {
         operationsPressed++;
         console.log(operationsPressed);
+
         if(decimalCount <= operationsPressed)
         {
           decimalButton.disabled = false;
@@ -346,7 +364,6 @@ function manageOperations()
       else
       {
         var previousInput = operationString[i-1];
-
       }
       if(previousInput == '+' || previousInput == '-' || previousInput == '*' || previousInput == '/')
       {
@@ -928,10 +945,7 @@ function manageOperations()
   {
     solution = operate(parsedFirst, parsedSecond, operator);
     truncatedSolution = solution.toFixed(4);
-    /*console.log(plusCount);
-    console.log(minusCount);
-    console.log(multCount);
-    console.log(divCount);*/
+
     if(solution.toString().length <= 15 || truncatedSolution.toString().length <= 15)
     {
       if(solution % 1 === 0)
