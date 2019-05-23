@@ -53,7 +53,7 @@ function labelButtons()
         allButtons[i].classList.add('language-button');
         break;
       case 2:
-        allButtons[i].textContent = "ESP";
+        allButtons[i].textContent = "SPA";
         allButtons[i].setAttribute('id', 'spanish-button');
         allButtons[i].setAttribute('title', "Spanish");
         allButtons[i].classList.add('language-button');
@@ -984,7 +984,7 @@ function manageOperations()
         else
         {
           alert("La solución ha superado la capacidad del visualizador y es: " + solution + " o " + solution.toExponential() + '.\n' +
-        "\nLe informamos que el visualizador estará limpiado una vez que este aviso está despidido, así que anote este número en otro lugar si es necesario.");
+        "\nLe informamos que el visualizador estará limpiado una vez que este aviso está despedido, así que anote este número en otro lugar si es necesario.");
         }
         clearDisplay();
       }
@@ -1041,6 +1041,7 @@ function changeLanguage()
     englishButton.textContent = "ING";
     englishButton.title = "inglés";
     spanishButton.title = "español";
+    spanishButton.textContent = "ESP";
     deleteButton.textContent = "SUPR";
     deleteButton.title = "suprimir"
     clearButton.title = "limpiar el visualizador";
@@ -1054,6 +1055,7 @@ function changeLanguage()
     englishButton.textContent = "ENG";
     englishButton.title = "English";
     spanishButton.title = "Spanish";
+    spanishButton.textContent = "SPA";
     deleteButton.textContent = "DEL";
     deleteButton.title = "Delete"
     clearButton.title = "Clear";
