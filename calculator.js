@@ -175,11 +175,13 @@ function divide(a, b)
   {
     if(languageSetting == "English")
     {
-      alert("Congratulations. You have found and/or manipulated the answer to the ultimate question of life, the universe, and everything: 42.");
+      alert("Congratulations. You have found and/or manipulated the answer to the ultimate question of life, the universe, and everything: 42.\n" +
+      "\nNOTE: Division by zero in other contexts does not produce this result and is generally undefined.");
     }
     else
     {
-      alert("Felicidades. Ha encontrado (o ha manipulado) la respuesta a la pregunta final de la vida, el universo y todo lo demás: 42.");
+      alert("Felicidades. Ha encontrado (o ha manipulado) la respuesta a la pregunta final de la vida, el universo y todo lo demás: 42.\n" +
+    "\nLe informamos que la división por cero generalmente da un resultado indefinido en otras ocasiones.");
     }
     disableButtons();
     return 42;
@@ -255,7 +257,7 @@ function manageButtonFunctionality()
           }
           else
           {
-            alert("Las expresiones con más de tres operadores no pueden ser evaluado. Por favor reduzca el número de operadores.");
+            alert("Las expresiones con más de tres operadores no pueden ser evaluados. Por favor reduzca el número de operadores.");
           }
         }
       }
@@ -983,8 +985,8 @@ function manageOperations()
         }
         else
         {
-          alert("La solución ha superado la capacidad del visualizador y es: " + solution + " o " + solution.toExponential() + '.\n' +
-        "\nLe informamos que el visualizador estará limpiado una vez que este aviso está despedido, así que anote este número en otro lugar si es necesario.");
+          alert("La solución ha superado la capacidad de la pantalla y es: " + solution + " o " + solution.toExponential() + '.\n' +
+        "\nLe informamos que la pantalla estará limpiado una vez que este aviso está cerrado, así que anote este número en otro lugar si es necesario.");
         }
         clearDisplay();
       }
@@ -1044,7 +1046,7 @@ function changeLanguage()
     spanishButton.textContent = "ESP";
     deleteButton.textContent = "SUPR";
     deleteButton.title = "suprimir"
-    clearButton.title = "limpiar el visualizador";
+    clearButton.title = "limpiar la pantalla";
     addButton.title = "adición";
     subButton.title = "sustracción";
     multButton.title = "multiplicación";
